@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 3.12)
 
 project(OPCDA_MINGW)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
 add_executable(Test
     src/Test.cc include/opccomn_i.c include/OpcEnum_i.c)   
-target_include_directories(Test PRIVATE include)
+target_include_directories(Test PRIVATE ${OPCDA_MINGW_SOURCE_DIR}/include)
 target_compile_options(Test PRIVATE -DUNICODE -D_UNICODE -municode)
 target_link_options(Test PRIVATE -municode)
 
