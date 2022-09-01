@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 
 project(OPCDA_MINGW)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED 17)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED 14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 add_executable(Test
@@ -21,3 +21,25 @@ add_custom_command(TARGET Test POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
                         ${LIB_PATH}/*.dll
                         ${CMAKE_BINARY_DIR})   
+
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG release-1.12.1
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+
+enable_testing()
+add_executable(Test2
+    src/Test2.cc include/opccomn_i.c include/OpcEnum_i.c)
+target_include_directories(Test2 PRIVATE ${OPCDA_MINGW_SOURCE_DIR}/include)
+include(GoogleTest)
+target_compile_options(Test2 PRIVATE -DUNICODE -D_UNICODE)
+target_link_options(Test2 PRIVATE)
+target_link_libraries(Test2 GTest::gtest_main)
+
+add_test(NAME Test2 COMMAND Test2)

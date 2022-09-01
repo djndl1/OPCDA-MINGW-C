@@ -1,15 +1,11 @@
-#include "opccomn.h"
-#include "OpcEnum.h"
+#include <gtest/gtest.h>
 
 #include <windows.h>
-
+#include "opccomn.h"
+#include "OpcEnum.h"
 #include <iostream>
 
-using std::cout;
-using std::endl;
-
-extern "C"
-int wmain(int argc, wchar_t* argv[])
+void test_func()
 {
     ::CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
@@ -31,7 +27,7 @@ int wmain(int argc, wchar_t* argv[])
         std::cout << "Failed to create Kepserver: " << std::hex << result << std::dec << '\n';
 
 
-        return 1;
+        return;
     }
     LCID locale_id = { 0 };
     HRESULT locale_result = server->GetLocaleID(&locale_id);
@@ -39,7 +35,7 @@ int wmain(int argc, wchar_t* argv[])
     if (!SUCCEEDED(locale_result))
     {
         std::cout << "Failed to get Locale" << '\n';
-        return 2;
+        return;
     }
 
     std::cout << locale_id << std::endl;
@@ -54,8 +50,14 @@ int wmain(int argc, wchar_t* argv[])
 
         std::cout << std::hex <<  LANGIDFROMLCID(lcids[i]) << std::endl;
     }
+}
 
-    
+// Demonstrate some basic assertions.
+TEST(HelloTest, BasicAssertions) {
+  // Expect two strings not to be equal.
+  EXPECT_STRNE("hello", "world");
+  // Expect equality.
+  EXPECT_EQ(7 * 6, 42);
 
-    return 0;
+  test_func();
 }

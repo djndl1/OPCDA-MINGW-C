@@ -1,3 +1,5 @@
+-DUNICODE
+-D_UNICODE
 -I/usr/i686-w64-mingw32/include
 -Iinclude
 -Llib
