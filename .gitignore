@@ -1,1 +1,5 @@
-build
+build/
+build32/
+build64/
+lib/i686/*
+lib/x86_64/*
