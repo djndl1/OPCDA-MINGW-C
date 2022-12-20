@@ -14,10 +14,18 @@ if(TARGET_X86_64)
 else()
     SET(LIB_PATH ${OPCDA_MINGW_C_SOURCE_DIR}/lib/i686)
 endif()
-add_custom_command(TARGET Test POST_BUILD
+
+add_library(copcda SHARED
+            src/utf.c
+            src/opc_locale.c
+            src/stc_instantiation.c)
+target_include_directories(copcda BEFORE
+                            PRIVATE ${OPCDA_MINGW_C_SOURCE_DIR}/include)
+
+add_custom_command(TARGET copcda POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
                         ${LIB_PATH}/*.dll
-                        ${CMAKE_BINARY_DIR})   
+                        ${CMAKE_BINARY_DIR})
 
 include(FetchContent)
 FetchContent_Declare(
@@ -32,11 +40,19 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 add_executable(Test2
-    src/Test2.cc include/opccomn_i.c include/OpcEnum_i.c)
-target_include_directories(Test2 PRIVATE ${OPCDA_MINGW_SOURCE_DIR}/include)
+    test/Test2.cc include/opccomn_i.c include/OpcEnum_i.c)
+target_include_directories(Test2 PRIVATE ${OPCDA_MINGW_C_SOURCE_DIR}/include)
 include(GoogleTest)
-target_compile_options(Test2 PRIVATE -DUNICODE -D_UNICODE)
+target_compile_options(Test2 PRIVATE -DCINTERFACE -DCOBJMACROS)
 target_link_options(Test2 PRIVATE)
 target_link_libraries(Test2 GTest::gtest_main)
 
 add_test(NAME Test2 COMMAND Test2)
+
+add_executable(utf_test test/utf_test.cc)
+target_include_directories(utf_test PRIVATE ${OPCDA_MINGW_C_SOURCE_DIR}/include)
+target_link_libraries(utf_test copcda)
+include(GoogleTest)
+target_compile_options(utf_test PRIVATE -DCINTERFACE -DCOBJMACROS)
+target_link_options(utf_test PRIVATE)
+target_link_libraries(utf_test GTest::gtest_main)
