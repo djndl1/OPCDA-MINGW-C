@@ -102,3 +102,4 @@ CTestTestfile.cmake
 _deps
 
 .clangd/
+.vscode/settings.json
