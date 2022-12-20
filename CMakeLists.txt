@@ -1,21 +1,18 @@
-cmake_minimum_required(VERSION 3.24)
+cmake_minimum_required(VERSION 3.12)
 
-project(OPCDA_MINGW)
+project(OPCDA_MINGW_C)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED 17)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-add_executable(Test
-    src/Test.cc include/opccomn_i.c include/OpcEnum_i.c)   
-target_include_directories(Test PRIVATE ${OPCDA_MINGW_SOURCE_DIR}/include)
-target_compile_options(Test PRIVATE -DUNICODE -D_UNICODE -municode)
-target_link_options(Test PRIVATE -municode)
+add_definitions(-DUNICODE -D_UNICODE -DSTC_HEADER)
+include_directories(${OPCDA_MINGW_C_SOURCE_DIR}/lib/STC-3.8/include)
 
 if(TARGET_X86_64)
-    SET(LIB_PATH ${OPCDA_MINGW_SOURCE_DIR}/lib/x86_64)
+    SET(LIB_PATH ${OPCDA_MINGW_C_SOURCE_DIR}/lib/x86_64)
 else()
-    SET(LIB_PATH ${OPCDA_MINGW_SOURCE_DIR}/lib/i686)
+    SET(LIB_PATH ${OPCDA_MINGW_C_SOURCE_DIR}/lib/i686)
 endif()
 add_custom_command(TARGET Test POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy
