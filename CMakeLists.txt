@@ -19,6 +19,7 @@ add_library(copcda SHARED
             src/utf.c
             src/opc_locale.c
             src/stc_instantiation.c)
+target_compile_definitions(copcda PRIVATE)
 target_include_directories(copcda BEFORE
                             PRIVATE ${OPCDA_MINGW_C_SOURCE_DIR}/include)
 
@@ -51,8 +52,7 @@ add_test(NAME Test2 COMMAND Test2)
 
 add_executable(utf_test test/utf_test.cc)
 target_include_directories(utf_test PRIVATE ${OPCDA_MINGW_C_SOURCE_DIR}/include)
-target_link_libraries(utf_test copcda)
 include(GoogleTest)
-target_compile_options(utf_test PRIVATE -DCINTERFACE -DCOBJMACROS)
+target_compile_definitions(utf_test PRIVATE)
 target_link_options(utf_test PRIVATE)
-target_link_libraries(utf_test GTest::gtest_main)
+target_link_libraries(utf_test GTest::gtest_main copcda)
