@@ -1,4 +1,4 @@
-#include "internal/utf.h"
+#include "utf.h"
 
 #include <windows.h>
 

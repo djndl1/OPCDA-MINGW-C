@@ -3,7 +3,7 @@
 
 #include <wchar.h>
 
-#include <internal/utf.h>
+#include "utf.h"
 
 using ::testing::Eq;
 
